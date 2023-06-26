@@ -131,6 +131,6 @@ dmypy.json
 # .idea
 .idea
 
-# статика
+# static/media ignor
 static/
 media/
