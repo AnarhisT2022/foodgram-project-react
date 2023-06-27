@@ -135,7 +135,7 @@ class IngredientInRecipe(models.Model):
         validators=[
             MinValueValidator(1),
             MaxValueValidator(10000)
-            ]
+        ]
     )
 
     class Meta:
