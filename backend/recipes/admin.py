@@ -5,12 +5,12 @@ from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 
 class IngredientsInLine(admin.TabularInline):
     model = Recipe.ingredients.through
-    extra = 0
+    extra = 1
 
 
 class TagInLine(admin.TabularInline):
     model = Recipe.tags.through
-    extra = 0
+    extra = 1
 
 
 @admin.register(Favorite)
@@ -39,9 +39,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
 
     def favorites(self, obj):
-        if Favorite.objects.filter(recipe=obj).exists():
-            return Favorite.objects.filter(recipe=obj).count()
-        return 0
+        return Favorite.objects.filter(recipe=obj).count()
 
 
 @admin.register(ShoppingCart)

@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-zsox$@$3oppq^am)_wj-nt9*nyot9)+2ke45^k+w#ydj=@5!vj'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-123')
 
 DEBUG = True
 
@@ -109,7 +109,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': [
+        'rest_framework.pagination.PageNumberPagination'
+    ],
     'PAGE_SIZE': 6,
 }
 

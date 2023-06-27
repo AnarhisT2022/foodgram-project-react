@@ -198,7 +198,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             amount = i['amount']
             if int(amount) < 1:
                 raise serializers.ValidationError({
-                    'amount': 'Количество ингредиента должно быть больше 0!'
+                    'amount': 'Количество ингредиентов должно быть больше 0!'
+                })
+            if int(amount) > 10000:
+                raise serializers.ValidationError({
+                    'amount': (
+                        'Количество ингредиентов должно быть не более 10000!'
+                    )
                 })
             if i['id'] in list:
                 raise serializers.ValidationError({

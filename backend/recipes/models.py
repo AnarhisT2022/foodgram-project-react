@@ -1,5 +1,5 @@
 from colorfield.fields import ColorField
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -90,12 +90,18 @@ class Recipe(models.Model):
         related_name='tags',
         blank=False
     )
-    cooking_time = models.PositiveIntegerField(
+    cooking_time = models.IntegerField(
         verbose_name='Время приготовления',
         blank=False,
-        validators=[MinValueValidator(
-            1, message='Время приготовления должно быть не менее 1 минуты!'
-        )]
+        validators=[
+            MinValueValidator(
+                1,
+                message='Время приготовления должно быть не менее 1 минуты!'
+            ),
+            MaxValueValidator(
+                600,
+                message='Время приготовления должно быть не более 600 минут!'
+            )]
     )
     pub_date = models.DateField(
         'Дата публикации',
@@ -124,9 +130,12 @@ class IngredientInRecipe(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Ингредиент'
     )
-    amount = models.IntegerField(
+    amount = models.PositiveSmallIntegerField(
         'Количество',
-        validators=[MinValueValidator(1)]
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10000)
+            ]
     )
 
     class Meta:
@@ -163,55 +172,41 @@ class RecipeTag(models.Model):
         ]
 
 
-class ShoppingCart(models.Model):
-    """ Модель корзины. """
+class ShopingCartAndFavorite(models.Model):
 
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
-        related_name='shopping_cart',
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт',
-        related_name='shopping_cart',
     )
 
     class Meta:
-        verbose_name = 'Рецепт в корзине'
-        verbose_name_plural = 'Рецепты в корзине'
+        abstract = True
+        verbose_name = 'Корзина и Избранное'
         constraints = [
             UniqueConstraint(
                 fields=['user', 'recipe'],
-                name='user_shoppingcart_unique'
+                name='user_favorite_shoppingcart_unique'
             )
         ]
 
 
-class Favorite(models.Model):
-    """ Модель избранного. """
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name='Пользователь',
-        related_name='favorites',
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        verbose_name='Рецепт',
-        related_name='favorites',
-    )
+class Favorite(ShopingCartAndFavorite):
 
     class Meta:
+        default_related_name = 'favorites'
         verbose_name = 'Избранный рецепт'
         verbose_name_plural = 'Избранные рецепты'
-        constraints = [
-            UniqueConstraint(
-                fields=['user', 'recipe'],
-                name='user_favorite_unique'
-            )
-        ]
+
+
+class ShoppingCart(ShopingCartAndFavorite):
+
+    class Meta:
+        default_related_name = 'shopping_cart'
+        verbose_name = 'Рецепт в корзине'
+        verbose_name_plural = 'Рецепты в корзине'

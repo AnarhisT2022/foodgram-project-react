@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import UniqueConstraint
+from .validators import validate_username
+from rest_framework.exceptions import ValidationError
 
 
 USER = 'user'
@@ -24,6 +26,7 @@ class User(AbstractUser):
         blank=False,
         unique=True,
         verbose_name='Логин',
+        validators=[validate_username]
     )
     first_name = models.CharField(
         max_length=150,
@@ -49,7 +52,6 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     class Meta:
-        ordering = ['-pk']
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
@@ -72,6 +74,12 @@ class Subscription(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Автор'
     )
+
+    def clean(self):
+        if self.user == self.author:
+            raise ValidationError(
+                'Запрещено подписываться на себя'
+            )
 
     class Meta:
         verbose_name = 'Подписка'
