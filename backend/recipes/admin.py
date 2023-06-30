@@ -1,21 +1,25 @@
 from django.contrib import admin
 
-from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
+from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag, RecipeTag
 
 
 class IngredientsInLine(admin.TabularInline):
     model = Recipe.ingredients.through
-    extra = 1
+    extra = 2
 
 
 class TagInLine(admin.TabularInline):
     model = Recipe.tags.through
-    extra = 1
+    extra = 2
+
+
+@admin.register(RecipeTag)
+class RecipetagAdmin(admin.ModelAdmin):
+    list_display = ['id', 'recipe', 'tag']
 
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'recipe']
     search_fields = ['user__username', 'user__email']
     empty_value_display = '-пусто-'
 
