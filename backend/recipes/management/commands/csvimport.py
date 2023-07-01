@@ -14,11 +14,12 @@ class Command(BaseCommand):
 
         with open(file_path, encoding='utf-8') as f:
             jsondata = json.load(f)
-            try:
-                Ingredient.objects.bulk_create(
-                    [Ingredient(**ingredient) for ingredient in jsondata]
-                )
-                print(f'{Ingredient.objects.all().count()} '
-                      'ингредиентов импортированою.')
-            except Exception as error_message:
-                raise Exception(error_message)
+            if 'measurement_unit' in jsondata[0]:
+                for line in jsondata:
+                    if not Ingredient.objects.filter(
+                       name=line['name'],
+                       measurement_unit=line['measurement_unit']).exists():
+                        Ingredient.objects.create(
+                            name=line['name'],
+                            measurement_unit=line['measurement_unit']
+                        )
