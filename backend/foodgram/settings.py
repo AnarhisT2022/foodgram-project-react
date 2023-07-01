@@ -10,7 +10,7 @@ CSRF_TRUSTED_ORIGINS = ['158.160.21.125', 'https://insta-foodgram.ddns.net']
 DEBUG = True
 
 ALLOWED_HOSTS = ['158.160.21.125', '127.0.0.1', 'localhost',
-                 'insta-foodgram.ddns.net']
+                 'https://insta-foodgram.ddns.net']
 
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
