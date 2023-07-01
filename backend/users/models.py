@@ -1,9 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.db.models import UniqueConstraint
-from .validators import validate_username
 from rest_framework.exceptions import ValidationError
 
+from .validators import validate_username
 
 USER = 'user'
 ADMIN = 'admin'
