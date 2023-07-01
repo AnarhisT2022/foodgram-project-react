@@ -9,7 +9,7 @@ https://insta-foodgram.ddns.net/
 ### Запуск проекта:
 1. Клонируйте проект:
 ```
-git clone https://github.com/ruzhova/foodgram-project-react.git
+git clone https://github.com/AnarhisT2022/foodgram-project-react.git
 ```
 2. Подготовьте сервер:
 ```
