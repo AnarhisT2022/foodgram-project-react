@@ -1,17 +1,22 @@
 version: '3.3'
 
 volumes:
+  pg_data:
   static:
   media:
 
 services:
+  db:
+    image: postgres:13
+    env_file: ../.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
   backend:
     build:
       context: ../backend
       dockerfile: Dockerfile
     volumes:
       - ../static/:/app/static/colorfield/
-      - ../backend/db.sqlite3:/app/db.sqlite3
       - ../static/:/app/static/
       - ../media/:/app/media/recipes/
   frontend:
@@ -23,7 +28,7 @@ services:
   nginx:
     image: nginx:1.19.3
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       - ../static/:/var/html/static/
       - ../static/:/var/html/static/colorfield/

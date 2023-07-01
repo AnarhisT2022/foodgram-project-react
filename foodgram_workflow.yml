@@ -3,7 +3,7 @@ name: Main Foodgram workflow
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   tests:
@@ -152,7 +152,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
-          cd foodgram
+          cd foodgram/infra
           sudo docker compose -f docker-compose.production.yml down
           sudo docker system prune -a -f
           # Выполняет pull образов с DockerHub
