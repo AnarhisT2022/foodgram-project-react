@@ -5,6 +5,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-123')
 
+CSRF_TRUSTED_ORIGINS = ['158.160.21.125', 'insta-foodgram.ddns.net']
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['158.160.21.125', '127.0.0.1', 'localhost',
