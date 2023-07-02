@@ -3,7 +3,7 @@ from recipes.models import Ingredient, Recipe, Tag
 
 
 class IngredientFilter(filter.FilterSet):
-    name = filter.filters.CharFilter(field_name='name', lookup_expr='icontains')
+    name = filter.CharFilter(field_name='name', lookup_expr='icontains')
 
     class Meta:
         model = Ingredient
