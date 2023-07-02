@@ -56,11 +56,10 @@ class ProfileSerializer(UserSerializer):
             'is_subscribed',
         )
 
-    def get_is_subscribed(self, obj):
+    def get_is_subscribed(self, author):
         request = self.context.get('request')
-        return Subscription.objects.filter(
-            author=obj, user=request.user
-        ).exists() and not request.user.is_anonymous
+        return (request and request.user.is_authenticated
+                and request.user.subscriber.filter(author=author).exists())
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -136,13 +135,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_favorited(self, obj):
         request = self.context.get('request')
         return not request.user.is_anonymous and Favorite.objects.filter(
-            user_id=request.user, recipe_id=obj
+            user=request.user, recipe_id=obj
         ).exists()
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
         return not request.user.is_anonymous and ShoppingCart.objects.filter(
-            user_id=request.user, recipe_id=obj
+            user=request.user, recipe_id=obj
         ).exists()
 
 
