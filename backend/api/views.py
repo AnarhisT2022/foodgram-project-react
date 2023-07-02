@@ -107,7 +107,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_classes = IngredientFilter
-    search_fields = ['^name', ]
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
