@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import Subscription, User
 
-from .filters import IngredientFilter, RecipeFilter, TagFilter
+from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeSerializer,
