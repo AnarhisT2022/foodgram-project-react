@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import Subscription, User
 
-from .filters import IngredientFilter, RecipeFilter
+from .filters import IngredientFilter, RecipeFilter, TagFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeSerializer,
@@ -94,8 +94,11 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 
     permission_classes = [AllowAny, ]
     pagination_class = None
-    serializer_class = TagSerializer
     queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    filter_backends = [IsAuthorOrAdminOrReadOnly, ]
+    filter_backends = [TagFilter, ]
+    search_fields = ['^name', ]
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
