@@ -59,9 +59,7 @@ class ProfileSerializer(UserSerializer):
     def get_is_subscribed(self, author):
         request = self.context.get('request')
         return (request and request.user.is_authenticated
-                and request.user.subscriber.filter(
-                    author=author, user=request.user
-                ).exists())
+                and request.user.subscribtion.filter(author=author).exists())
 
 
 class TagSerializer(serializers.ModelSerializer):
